@@ -1,6 +1,5 @@
-// !!! this code belongs to google (probably), is already publicly available, it is not originally from the project's author and is simply used here.
-
 #version 310 es
+// !!! this code belongs to google (probably), is already publicly available, it is not originally from the project's author and is simply used here.
 #define PI 3.1415926535897932384626433832795
 #define TWO_PI 2. * PI
 

@@ -12,6 +12,6 @@ abstract class GrooveWallpaperService extends WallpaperService {
   @Override
   public Engine onCreateEngine() {
     GrooveConfig config = GrooveConfigs.forId(configId);
-    return new GrooveEngine(this, () -> new GrooveRenderer(config));
+    return new GrooveEngine(this, () -> new GrooveRenderer(getAssets(), config));
   }
 }

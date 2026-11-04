@@ -1,6 +1,5 @@
-// !!! this code belongs to google (probably), is already publicly available, it is not originally from the project's author and is simply used here.
-
 #version 310 es
+// !!! this code belongs to google (probably), is already publicly available, it is not originally from the project's author and is simply used here.
 
 /* Other Methods */
 #include SHADER_METHODS
