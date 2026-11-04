@@ -1,2 +1,3 @@
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
-    android:description="@string/groove_description" />
+    android:description="@string/groove_description"
+    android:thumbnail="@drawable/chill_preview" />
