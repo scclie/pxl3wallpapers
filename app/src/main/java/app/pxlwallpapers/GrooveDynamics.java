@@ -3,6 +3,7 @@ package app.pxlwallpapers;
 final class GrooveDynamics {
   private static final float PLANE_WIDTH = 7f;
   private static final float SCALE_TIME_REGULAR = 0.4f;
+  private static final float SCALE_TIME_BATTERY_SAVE = 0.1f;
   private static final float OSC_AMPLITUDE = 0.1f;
   private static final float OSC_AMPLITUDE_LANDSCAPE = 0.03f;
   private static final float OSC_CENTER_LANDSCAPE = 0.5f;
@@ -17,7 +18,7 @@ final class GrooveDynamics {
 
   private final GrooveConfig config;
   private float time;
-  private final float seed;
+  private float seed;
   private float accumulatedPhase;
   private float touchStrength;
   private float pageOffset;
@@ -36,6 +37,12 @@ final class GrooveDynamics {
   private float oscCenter;
   private float outerAmp = OUTER_NOISE_AMP;
   private float rotationRadians;
+  private float scaleTime = SCALE_TIME_REGULAR;
+  private float animatePowerSave = 1f;
+  private float powerSaveTweenStart;
+  private float powerSaveTweenTarget = 1f;
+  private float powerSaveTweenElapsed;
+  private boolean powerSaveTweenAnimating;
 
   GrooveDynamics(GrooveConfig config) {
     this.config = config;
@@ -64,7 +71,7 @@ final class GrooveDynamics {
   }
 
   void update(float delta, float aspectRatio) {
-    float deltaScaled = SCALE_TIME_REGULAR * delta;
+    float deltaScaled = scaleTime * delta;
     lockedValue = 1f - (aodValue + unlockedValue);
     time += (PLANE_WIDTH * loudness + 1f) * deltaScaled;
 
@@ -75,7 +82,9 @@ final class GrooveDynamics {
 
     float speedWave = PHASE_SPEED * (2f * loudness + 1f);
     accumulatedPhase = (accumulatedPhase + deltaScaled * speedWave) % 1f;
-    phase = 0.65f + SWIPE_PHASE * pageOffset * unlockedValue - accumulatedPhase * (float) (Math.PI * 2d);
+    updatePowerSaveTween(delta);
+    phase = 0.65f + SWIPE_PHASE * pageOffset * unlockedValue * animatePowerSave
+        - accumulatedPhase * (float) (Math.PI * 2d);
 
     float noiseAmpVarPresenceBand = map(0f, 0.4f, 0.7f, 1f, 0f);
     noiseAmpVarPresenceBandEased += (noiseAmpVarPresenceBand - noiseAmpVarPresenceBandEased) * deltaScaled * 4f;
@@ -98,6 +107,30 @@ final class GrooveDynamics {
     oscCenter = lerp(aspectRatio > 1f ? OSC_CENTER_LANDSCAPE : config.oscCenter(), config.oscCenterAod(), aodValue + lockedValue);
     outerAmp = OUTER_NOISE_AMP * lerp(1f, 0.25f, aodValue);
     loudness += (loudnessTarget - loudness) * 0.03f;
+  }
+
+  void resume() {
+    if (time >= 14400f) {
+      time = 7200f * (float) Math.random() + .1f;
+      seed = 513.3400268554688f * (float) Math.random() + .1f;
+    }
+  }
+
+  void setLowSpeed(boolean lowSpeed) {
+    scaleTime = lowSpeed ? SCALE_TIME_BATTERY_SAVE : SCALE_TIME_REGULAR;
+    powerSaveTweenStart = animatePowerSave;
+    powerSaveTweenTarget = lowSpeed ? 0f : 1f;
+    powerSaveTweenElapsed = 0f;
+    powerSaveTweenAnimating = true;
+  }
+
+  private void updatePowerSaveTween(float delta) {
+    if (!powerSaveTweenAnimating) return;
+    powerSaveTweenElapsed += delta;
+    float time = Math.min(powerSaveTweenElapsed, 2f) / 2f;
+    float transition = -time * (time - 2f);
+    animatePowerSave = (powerSaveTweenTarget - powerSaveTweenStart) * transition + powerSaveTweenStart;
+    powerSaveTweenAnimating = powerSaveTweenElapsed < 2f;
   }
 
   float time() { return time; }

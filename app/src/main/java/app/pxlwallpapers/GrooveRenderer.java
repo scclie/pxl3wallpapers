@@ -105,7 +105,7 @@ final class GrooveRenderer implements GlRenderer {
     float frustumScale = width < height ? 0.937f : 0.7f;
     float[] projection = Matrix4f.ortho(
         -planeWidth * frustumScale / 2f, planeWidth * frustumScale / 2f,
-        planeHeight * frustumScale / 2f, -planeHeight * frustumScale / 2f,
+        -planeHeight * frustumScale / 2f, planeHeight * frustumScale / 2f,
         -1f, 1f);
     GLES31.glUniformMatrix4fv(diskProgram.uniform("u_projTrans"), 1, false, projection, 0);
     GLES31.glUniformMatrix4fv(diskProgram.uniform("u_transform"), 1, false,
@@ -229,6 +229,19 @@ final class GrooveRenderer implements GlRenderer {
 
   @Override public void setPageOffset(float value) {
     dynamics.setPageOffset(value);
+  }
+
+  @Override public void setPresence(float aodValue, float unlockedValue) {
+    dynamics.setAodValue(aodValue);
+    dynamics.setUnlockedValue(unlockedValue);
+  }
+
+  @Override public void setLowSpeed(boolean lowSpeed) {
+    dynamics.setLowSpeed(lowSpeed);
+  }
+
+  @Override public void resume() {
+    dynamics.resume();
   }
 
   @Override public void setTouchStrength(float value) {

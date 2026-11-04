@@ -7,7 +7,7 @@ import java.nio.ShortBuffer;
 
 final class GroovePlaneMesh {
   static final int POINTS = 100;
-  static final float WIDTH = 4f;
+  static final float WIDTH = 7f;
   static final float HEIGHT = 4f;
 
   final FloatBuffer vertices;
@@ -24,7 +24,7 @@ final class GroovePlaneMesh {
         vertexData[offset + 1] = (row == 0 ? 0f : HEIGHT) - HEIGHT / 2f;
         vertexData[offset + 2] = 0f;
         vertexData[offset + 3] = position;
-        vertexData[offset + 4] = row;
+        vertexData[offset + 4] = row == 0 ? 1f : 0f;
       }
       if (point + 1 < POINTS) {
         int vertex = point * 2;
