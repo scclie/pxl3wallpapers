@@ -14,11 +14,15 @@ public final class Matrix4fTest {
   }
 
   @Test
-  public void rotateZMovesUnitXToUnitY() {
-    float[] matrix = Matrix4f.rotateZ(Matrix4f.identity(), (float) (Math.PI / 2));
-    float[] result = Matrix4f.transform(matrix, new float[] {1f, 0f, 0f, 1f});
+  public void transformUsesRotationThenNonUniformScale() {
+    float[] matrix = Matrix4f.transform(0f, 0f, 0f, (float) (Math.PI / 2), 3.5f, 4.9f, 1f);
 
-    assertEquals(0f, result[0], 0.001f);
-    assertEquals(1f, result[1], 0.001f);
+    float[] xAxis = Matrix4f.transform(matrix, new float[] {1f, 0f, 0f, 1f});
+    float[] yAxis = Matrix4f.transform(matrix, new float[] {0f, 1f, 0f, 1f});
+    assertEquals(0f, xAxis[0], 0.001f);
+    assertEquals(3.5f, xAxis[1], 0.001f);
+    assertEquals(-4.9f, yAxis[0], 0.001f);
+    assertEquals(0f, yAxis[1], 0.001f);
   }
 }
+
