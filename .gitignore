@@ -1,0 +1,9 @@
+.android-sdk/
+.gradle/
+build/
+app/build/
+*.apk
+reference/
+gradlew
+gradlew.bat
+gradle/wrapper/
