@@ -60,7 +60,7 @@ final class GrooveEngine extends WallpaperService.Engine {
       renderer = rendererFactory.get();
       renderer.initialize();
       startedAtNanos = System.nanoTime();
-      handler.post(frame);
+      drawFrame();
     } catch (RuntimeException error) {
       Log.e(TAG, "Groove renderer initialization failed", error);
       release();

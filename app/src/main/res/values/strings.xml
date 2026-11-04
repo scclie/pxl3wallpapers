@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">pxlwallpapers</string>
+    <string name="chill_name">Groove, Chill</string>
+    <string name="party_name">Groove, Party</string>
+    <string name="after_dark_name">Groove, After Dark</string>
+    <string name="groove_description">A fixed Groove live wallpaper.</string>
 </resources>
